@@ -28,6 +28,8 @@ if ! which ros >/dev/null 2>&1 ||
     rm -rf "$AUTOCONF_DIR" "$ROSWELL_BUILD_DIR"
 fi
 
+echo "$PATH" >&2
+
 ros setup
 rm -rf "${ROSWELL_HOME}/.roswell/local-projects"
 ln -s "$OPENSHIFT_REPO_DIR" "${ROSWELL_HOME}/.roswell/local-projects"
