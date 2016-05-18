@@ -1,9 +1,7 @@
 #!/bin/sh
 
-source common.sh
-
 start () {
-    nohup ros run "${OPENSHIFT_REPO_DIR}/webapp"
+    nohup "${OPENSHIFT_REPO_DIR}/webapp" &
 }
 
 stop () {
