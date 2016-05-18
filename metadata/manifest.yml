@@ -1,0 +1,35 @@
+Name: Common-Lisp
+Cartridge-Short-Name: CL
+Display-Name: Common Lisp (Roswell/SBCL)
+Description: "A cartridge for web programming in Common Lisp, using Roswell to load SBCL."
+Version: '0.0.5.62'
+License: BSD
+Vendor: roswell
+Cartridge-Version: 0.2
+Cartridge-Vendor: andrewsoutar
+Categories:
+- web_framework
+- cl
+- roswell
+- sbcl
+Provides:
+- cl
+- roswell
+- sbcl
+- sbcl-1.3.5
+Endpoints:
+- Private-IP-Name: IP
+  Private-Port-Name: PORT
+  Private-Port: 8080
+  Public-Port-Name: PROXY_PORT
+  Protocols: [http, ws]
+  Options:
+    primary: true
+  Mappings:
+    - Frontend: ''
+      Backend: ''
+      Options:
+        websocket: true
+Scaling:
+  Min: 1
+  Max: -1

@@ -1,0 +1,33 @@
+#!/bin/sh
+
+[ "$#" -eq 2 -a "$1" = "--version" ] && VERSION="$2"
+
+if ! which ros >/dev/null 2>&1 ||
+       [ -z "$VERSION" || \
+               "$(ros --version | sed -r 's/^roswell (([0-9]+\.)*[0-9]+)\([a-f0-9]+\)$/\1/')" \
+                   != "$VERSION" ]; then
+    AUTOCONF_VERSION="2.69"
+    AUTOCONF_SRCDIR="autoconf-$AUTOCONF_VERSION"
+    AUTOCONF_URL="https://ftp.gnu.org/gnu/autoconf/${AUTOCONF_SRCDIR}.tar.xz"
+
+    AUTOCONF_DIR="${OPENSHIFT_TMP_DIR}/autoconf"
+    mkdir -p -- "${AUTOCONF_DIR}/{src,build,install}"
+    curl -L "$AUTOCONF_URL" 2>/dev/null | tar -xJC "${AUTOCONF_DIR}/src"
+    (cd "${AUTOCONF_DIR}/build";
+     "${AUTOCONF_DIR}/src/${AUTOCONF_SRCDIR}/configure" --prefix "${AUTOCONF_DIR}/install" &&
+         make && make install) >> "${OPENSHIFT_LOG_DIR}/autoconf-build.log"
+
+    ROSWELL_BUILD_DIR="${OPENSHIFT_TMP_DIR}/roswell"
+    git clone -b "$(if [ -n "$VERSION" ]; then echo "v$VERSION"; else echo "release"; fi)" \
+        https://github.com/roswell/roswell.git "$ROSWELL_BUILD_DIR"
+    (cd "$ROSWELL_BUILD_DIR";
+     export PATH="${AUTOCONF_DIR}/install/bin:$PATH";
+     sh bootstrap && ./configure --prefix "${OPENSHIFT_CL_DIR}/roswell" &&
+         make && make install) >> "${OPENSHIFT_LOG_DIR}/roswell-build.log"
+
+    rm -rf "$AUTOCONF_DIR" "$ROSWELL_BUILD_DIR"
+fi
+
+ros setup
+rm -rf "${ROSWELL_HOME}/.roswell/local-projects"
+ln -s "$OPENSHIFT_REPO_DIR" "${ROSWELL_HOME}/.roswell/local-projects"

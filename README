@@ -1,0 +1,5 @@
+This is a cartridge for Openshift which allows for the use of webapps written in
+Common Lisp.
+
+This cartridge is ALPHA QUALITY SOFTWARE; it is not complete and has not been
+extensively tested. EXPECT BUGS.

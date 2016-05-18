@@ -1,0 +1,50 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#| Run the webapp
+exec ros -Q -- $0 "$@"
+|#
+(defpackage #:ros.script.webapp
+  (:use #:cl))
+(in-package #:ros.script.webapp)
+
+(ql:quickload '(#:trivial-signal #:local-time))
+
+(defgeneric stop ())
+
+(defgeneric start (&optional debug)
+  (:method :around (&optional debug)
+    (if debug
+        (call-next-method)
+        (trivial-signal:signal-handler-bind
+            ((:usr1 (lambda (signo)
+                      (declare (ignore signo))
+                      (stop)
+                      (return-from start))))
+          (call-next-method))))
+  (:method :before (&optional debug)
+    (unless debug
+      (format t "Starting webapp at ~A.~%"
+              (local-time:format-timestring
+               nil (local-time:now)
+               :format local-time:+rfc-1123-format+))))
+  (:method :after (&optional debug)
+    (format t "Webapp is now running~:[~; in debug mode~].~%" debug)
+    (unless debug
+      (loop (sleep 3600)))))
+
+(defun main (&rest argv)
+  (start (string= (car argv) "--debug")))
+
+
+;;; Load your webapp's systems here.
+#+nil (ql:quickload '())
+
+(defmethod start (&optional debug)
+  (declare (ignorable debug))
+  ;; Put the code to start your web application in here
+  )
+
+(defmethod stop ()
+  ;; Put the code to stop your web application in here
+  (format t "Quitting...")
+  )

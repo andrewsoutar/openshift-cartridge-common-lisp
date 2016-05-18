@@ -1,0 +1,37 @@
+#!/bin/sh
+
+source common.sh
+
+start () {
+    nohup ros run "${OPENSHIFT_REPO_DIR}/webapp"
+}
+
+stop () {
+    kill -USR1 $(ps -ef | grep sbcl | grep -v grep | awk '{ print $2 }') >/dev/null 2>&1
+}
+
+build () {
+    ros build "${OPENSHIFT_REPO_DIR}/webapp.ros"
+}
+
+case "$1" in
+    start) start ;;
+    stop) stop ;;
+    restart) stop && start ;;
+    status) ;;
+    reload) ;;
+    tidy) ;;
+    pre-build) ;;
+    build) build ;;
+    deploy) ;;
+    post-deploy) ;;
+    pre-snapshot) ;;
+    post-snapshot) ;;
+    pre-restore) ;;
+    post-restore) ;;
+    pre-repo-archive) ;;
+    update-configuration) ;;
+  *) ;;
+esac
+
+exit 0
