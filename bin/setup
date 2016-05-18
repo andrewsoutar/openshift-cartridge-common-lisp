@@ -11,7 +11,7 @@ if ! which ros >/dev/null 2>&1 ||
     AUTOCONF_URL="https://ftp.gnu.org/gnu/autoconf/${AUTOCONF_SRCDIR}.tar.xz"
 
     AUTOCONF_DIR="${OPENSHIFT_TMP_DIR}/autoconf"
-    mkdir -p -- "${AUTOCONF_DIR}/{src,build,install}"
+    mkdir -p -- "${AUTOCONF_DIR}/"{src,build,install}
     curl -L "$AUTOCONF_URL" 2>/dev/null | tar -xJC "${AUTOCONF_DIR}/src"
     (cd "${AUTOCONF_DIR}/build";
      "${AUTOCONF_DIR}/src/${AUTOCONF_SRCDIR}/configure" --prefix "${AUTOCONF_DIR}/install" &&
