@@ -23,7 +23,7 @@ if ! which ros >/dev/null 2>&1 ||
     (cd "$ROSWELL_BUILD_DIR";
      export PATH="${AUTOCONF_DIR}/install/bin:$PATH";
      sh bootstrap && ./configure --prefix "${OPENSHIFT_CL_DIR}/roswell" &&
-         make && make install) >> "${OPENSHIFT_LOG_DIR}/roswell-build.log"
+         make && make install) # >> "${OPENSHIFT_LOG_DIR}/roswell-build.log"
 
     rm -rf "$AUTOCONF_DIR" "$ROSWELL_BUILD_DIR"
 fi
