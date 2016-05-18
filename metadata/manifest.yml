@@ -1,4 +1,4 @@
-Name: Common-Lisp
+Name: common-lisp
 Cartridge-Short-Name: CL
 Display-Name: Common Lisp (Roswell/SBCL)
 Description: "A cartridge for web programming in Common Lisp, using Roswell to load SBCL."
