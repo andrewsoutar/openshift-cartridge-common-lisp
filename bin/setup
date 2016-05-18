@@ -28,6 +28,7 @@ if ! which ros >/dev/null 2>&1 ||
     rm -rf "$AUTOCONF_DIR" "$ROSWELL_BUILD_DIR"
 fi
 
+env >&2
 echo "$PATH" >&2
 
 ros setup
